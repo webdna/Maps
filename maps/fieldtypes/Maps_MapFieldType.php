@@ -44,21 +44,21 @@ class Maps_MapFieldType extends BaseFieldType
 
     public function getInputHtml($name, $map)
     {
-        craft()->templates->includeJsFile('//maps.google.com/maps/api/js?sensor=false');
-
-        // Figure out what that ID is going to look like once it has been namespaced
-        $id = craft()->templates->formatInputId($name);
-        $namespacedId = craft()->templates->namespaceInputId($id);
-
-
+        //Get Maps Plugin
         $plugin = craft()->plugins->getPlugin('maps');
         if (!$plugin)
         {
             throw new Exception('Couldn’t find the Maps plugin!');
         }
+        //Get API Key
         $settings = $plugin->getSettings();
         $this->_apiKey = $settings->googleMapsApiKey;
 
+        craft()->templates->includeJsFile('//maps.google.com/maps/api/js?sensor=false&key='.$this->_apiKey);
+
+        // Figure out what that ID is going to look like once it has been namespaced
+        $id = craft()->templates->formatInputId($name);
+        $namespacedId = craft()->templates->namespaceInputId($id);
 
         // Create a raw string representation
         $value = '';
